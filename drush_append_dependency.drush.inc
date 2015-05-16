@@ -32,13 +32,13 @@ function drush_drush_append_dependency_post_pm_enable($extensions) {
  */
 function drush_append_dependency_write($extensions) {
   // @TODO: Create alter hook.
-  $exceptions = array(DEPLOY_MODULE, 'devel', 'drush_append_dependency');
+  $exceptions = array(variable_get('deploy_module'), 'devel', 'drush_append_dependency');
   if (in_array($extensions, $exceptions)) {
     return;
   }
-  $path = drupal_get_path('module', DEPLOY_MODULE);
+  $path = drupal_get_path('module', variable_get('deploy_module'));
   $dependency = PHP_EOL . 'dependencies[] = ' . $extensions;
-  $file = $path . '/' . DEPLOY_MODULE . '.info';
+  $file = $path . '/' . variable_get('deploy_module') . '.info';
   if (strpos(file_get_contents($file), $dependency) === FALSE) {
     file_put_contents($file, $dependency, FILE_APPEND);
   }
@@ -51,9 +51,9 @@ function drush_append_dependency_write($extensions) {
  */
 function drush_drush_append_dependency_pre_pm_disable($extensions) {
 
-  $path = drupal_get_path('module', DEPLOY_MODULE);
+  $path = drupal_get_path('module', variable_get('deploy_module'));
   $dependency = 'dependencies[] = ' . $extensions;
-  $file = $path . '/' . DEPLOY_MODULE . '.info';
+  $file = $path . '/' . variable_get('deploy_module') . '.info';
   $contents = file_get_contents($file);
   $contents = str_replace($dependency, '', $contents);
   file_put_contents($file, $contents);
@@ -64,9 +64,9 @@ function drush_drush_append_dependency_pre_pm_disable($extensions) {
  * Remove the dependency string from the deploy info file.
  */
 function drush_append_dependency_remove($extensions) {
-  $path = drupal_get_path('module', DEPLOY_MODULE);
+  $path = drupal_get_path('module', variable_get('deploy_module'));
   $dependency = "dependencies[] = " . $extensions;
-  $file = $path . '/' . DEPLOY_MODULE . '.info';
+  $file = $path . '/' . variable_get('deploy_module') . '.info';
 
   if (strpos(file_get_contents($file), $dependency) === TRUE) {
     file_put_contents($file, $dependency, FILE_APPEND);
