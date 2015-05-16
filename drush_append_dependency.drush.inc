@@ -13,9 +13,11 @@ function drush_drush_append_dependency_post_pm_enable($extensions) {
 
   if (!variable_get('deploy_module', FALSE)) {
     $module = drush_prompt(dt('No deploy module set! Please enter the name of your deploy module:'));
-    variable_set('deploy_module', $name);
-    if (module_exists($module)) {
+    if (!module_exists($module)) {
       return drush_user_abort("Module doesn't exist.");
+    }
+    else {
+      variable_set('deploy_module', $module);
     }
   }
   if (!drush_confirm(dt('Do you want to add @extensions as a dependency to @deploy_module',
