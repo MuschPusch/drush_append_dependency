@@ -1,0 +1,3 @@
+name = Drush append dependency
+description = "Helper to append dependency to deployment module"
+core = 7.x
